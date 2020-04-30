@@ -2,17 +2,18 @@ package pongv2;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 public class ball {
     double xVel, yVel, x, y;
+    boolean coll = false;
+    Color c = Color.white;
     
     public ball() {
         x = 350;
         y = 250;
         xVel = getRandomSpeed() * getRandomDirection();
         yVel = getRandomSpeed() * getRandomDirection();
-        System.out.print(xVel);
-        System.out.print(yVel);
     }
     
     public double getRandomSpeed() {
@@ -30,7 +31,13 @@ public class ball {
     }
     
     public void draw(Graphics g) {
-        g.setColor(Color.white);
+        if (coll) {
+            System.out.print("collision");
+            Random r = new Random();
+            c = new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+            coll = false;
+        }
+        g.setColor(c);
         g.fillOval((int)x - 10, (int)y - 10, 20, 20);
     }
     
@@ -38,11 +45,13 @@ public class ball {
         if(x <= 50) {
             if(y >= p1.getY() && y <= p1.getY() + 80) {
                 xVel = -xVel;
+                coll = true;
             }
         }
         else if(x >= 650) {
             if(y >= p2.getY() && y <= p2.getY() + 80) {
                 xVel = -xVel;
+                coll = true;
             }
         }
     }
